@@ -89,7 +89,7 @@ void deduplicate_rooms() {
 vector<PendingRequest> pending;
 
 // Design helpers
-const int DESIGN_WIDTH = 130;
+const int DESIGN_WIDTH = 110;
 const string BORDER_CHAR = "*";
 
 void coutBorder() {
@@ -146,7 +146,7 @@ void showRoomsByFloor() {
     coutCentered("Enter floor (1-4):");
     coutEmptyLine();
     coutBorder();
-    cout << "                                                            CHOICE: ";
+    cout << "                                                 CHOICE: ";
     cin >> floor;
     vector<Room> filtered;
     for (const auto& r : rooms)
@@ -189,7 +189,7 @@ void searchRoomsByNumber() {
     coutCentered("Enter room number to search:");
     coutEmptyLine();
     coutBorder();
-    cout << "                                                            CHOICE: ";
+    cout << "                                                 CHOICE: ";
     string key; getline(cin, key);
     bool found = false;
     for (const auto& r : rooms) {
@@ -211,8 +211,12 @@ void searchRoomsByType() {
     coutEmptyLine();
     coutCentered("Available Room Types:");
     coutEmptyLine();
-    for (int i = 0; i < 5; ++i)
-        coutLeftAlignedOption(to_string(i+1) + ". " + ALLOWED_ROOM_TYPES[i]);
+    for (int i = 0; i < 5; ++i) {
+        int center = (DESIGN_WIDTH - 2) / 26 - 4; // Centering based on 24 characters per type
+        string option = to_string(i+1) + ". " + ALLOWED_ROOM_TYPES[i];
+        string padded(center, ' ');
+        coutCentered(padded + option); // Prints out the options
+    }
     coutEmptyLine();
     coutBorder();
 
@@ -220,7 +224,7 @@ void searchRoomsByType() {
     coutCentered("Select Room Type (1-5):");
     coutEmptyLine();
     coutBorder();
-    cout << "                                                            CHOICE: ";
+    cout << "                                                 CHOICE: ";
     cin >> choice;
     if (choice < 1 || choice > 5) {
         coutBorder();
@@ -261,7 +265,7 @@ void searchRoomsByIssue() {
     coutCentered("Select Issue Type (1-3):");
     coutEmptyLine();
     coutBorder();
-    cout << "                                                            CHOICE: ";
+    cout << "                                                 CHOICE: ";
     cin >> choice;
     if (choice < 1 || choice > 3) {
         coutBorder();
@@ -290,13 +294,13 @@ void searchRoomsMenu() {
         coutEmptyLine();
         coutCentered("Search Rooms by:");
         coutEmptyLine();
-        coutLeftAlignedOption("                                                       [1] Room Number");
-        coutLeftAlignedOption("                                                       [2] Room Type");
-        coutLeftAlignedOption("                                                       [3] Issues");
-        coutLeftAlignedOption("                                                       [0] Back");
+        coutLeftAlignedOption("                                             [1] Room Number");
+        coutLeftAlignedOption("                                             [2] Room Type");
+        coutLeftAlignedOption("                                             [3] Issues");
+        coutLeftAlignedOption("                                             [0] Back");
         coutEmptyLine();
         coutBorder();
-        cout << "                                                            CHOICE: ";
+        cout << "                                                 CHOICE: ";
         int ch; cin >> ch;
         if (cin.fail()) { cin.clear(); cin.ignore(10000,'\n'); continue; }
         if (ch == 1) searchRoomsByNumber();
@@ -311,6 +315,7 @@ void searchRoomsMenu() {
             coutBorder();
         }
     }
+    coutBorder();
 }
 
 bool isDuplicateReq(const string& num, const string& issue) {
@@ -327,7 +332,7 @@ void requestIssue() {
     coutCentered("Enter room number:");
     coutEmptyLine();
     coutBorder();
-    cout << "                                                            CHOICE: ";
+    cout << "                                                 CHOICE: ";
     string num; getline(cin, num);
     auto it = find_if(rooms.begin(), rooms.end(),
         [&](const Room& r){ return r.number == num; });
@@ -345,10 +350,10 @@ void requestIssue() {
     coutCentered("Select issue type:");
     coutEmptyLine();
     for (int i = 0; i < 3; ++i)
-        coutLeftAlignedOption(to_string(i+1) + ". " + ALLOWED_ISSUES[i]);
+        coutCentered(to_string(i+1) + ". " + ALLOWED_ISSUES[i]);
     coutEmptyLine();
     coutBorder();
-    cout << "                                                            CHOICE: ";
+    cout << "                                                 CHOICE: ";
     int choice; cin >> choice;
     if (choice < 1 || choice > 3) {
         coutBorder();
@@ -426,31 +431,25 @@ int main() {
 
     coutBorder();
     coutEmptyLine();
-    cout << "*       ██████   ███              ██████████ ██████   █████                                                           █████      *" << endl;
-    cout << "*      ███░░███ ░░░              ░░███░░░░░█░░██████ ░░███                                                           ░░███       *" << endl;
-    cout << "*     ░███ ░░░  ████  █████ █████ ░███  █ ░  ░███░███ ░███  ████████   ██████   ████████ █████ ████  ██████   █████  ███████     *" << endl;
-    cout << "*    ███████   ░░███ ░░███ ░░███  ░██████    ░███░░███░███ ░░███░░███ ███░░███ ███░░███ ░░███ ░███  ███░░███ ███░░  ░░░███░      *" << endl;
-    cout << "*   ░░░███░     ░███  ░░░█████░   ░███░░█    ░███ ░░██████  ░███ ░░░ ░███████ ░███ ░███  ░███ ░███ ░███████ ░░█████   ░███       *" << endl;
-    cout << "*     ░███      ░███   ███░░░███  ░███ ░   █ ░███  ░░█████  ░███     ░███░░░  ░███ ░███  ░███ ░███ ░███░░░   ░░░░███  ░███ ███   *" << endl;
-    cout << "*     █████     █████ █████ █████ ██████████ █████  ░░█████ █████    ░░██████ ░░███████  ░░████████░░██████  ██████   ░░█████    *" << endl;
-    cout << "*    ░░░░░     ░░░░░ ░░░░░ ░░░░░ ░░░░░░░░░░ ░░░░░    ░░░░░ ░░░░░      ░░░░░░   ░░░░░███   ░░░░░░░░  ░░░░░░  ░░░░░░     ░░░░░     *" << endl;
-    cout << "*                                                                                  ░███                                          *" << endl;
-    cout << "*                                                                                  █████                                         *" << endl;
-    cout << "*                                                                                 ░░░░░                                          *" << endl;
+    cout << "*                              ░█▀▀░▀█▀░█░█░█▀▀░█▀█░█▀▄░█▀▀░▄▀▄░█░█░█▀▀░█▀▀░▀█▀                              *" << endl;
+    cout << "*                              ░█▀▀░░█░░▄▀▄░█▀▀░█░█░█▀▄░█▀▀░█ █░█░█░█▀▀░▀▀█░░█░                              *" << endl;
+    cout << "*                              ░▀░░░▀▀▀░▀░▀░▀▀▀░▀░▀░▀░▀░▀▀▀░░▀▀▀░▀░░▀▀▀░▀▀▀░░▀░                              *" << endl;
+    coutCentered("Welcome to fixENrequest!");
+
     coutEmptyLine();
     coutBorder();
     while (true) {
         coutEmptyLine();
         coutCentered("MAIN MENU");
         coutEmptyLine();
-        coutLeftAlignedOption("                                                       [1] Show Rooms");
-        coutLeftAlignedOption("                                                       [2] Search Rooms");
-        coutLeftAlignedOption("                                                       [3] Request Issue");
-        coutLeftAlignedOption("                                                       [4] Pending Requests");
-        coutLeftAlignedOption("                                                       [0] Exit");
+        coutLeftAlignedOption("                                             [1] Show Rooms");
+        coutLeftAlignedOption("                                             [2] Search Rooms");
+        coutLeftAlignedOption("                                             [3] Request Issue");
+        coutLeftAlignedOption("                                             [4] Pending Requests");
+        coutLeftAlignedOption("                                             [0] Exit");
         coutEmptyLine(); 
         coutBorder();
-        cout << "                                                            CHOICE: ";
+        cout << "                                                 CHOICE: ";
         int ch; cin >> ch;
         if (cin.fail()) { cin.clear(); cin.ignore(10000,'\n'); continue; }
         if (ch == 1) showRoomsByFloor();
